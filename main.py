@@ -3,7 +3,6 @@ import random
 
 pygame.init()
 screen = pygame.display.set_mode((1280,720))
-pygame.display.set_caption("Snake")
 clock = pygame.time.Clock()
 running = True
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
