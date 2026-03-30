@@ -6,6 +6,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
+game_over = False
  
 TILE_SIZE = 40
 COLS = screen.get_width() // TILE_SIZE
@@ -30,6 +31,8 @@ for x in range(COLS):
             pygame.draw.rect(screen, (50, 50, 50), rect, 1)
  
 while running:
+    screen.fill((20, 20, 20))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -41,6 +44,30 @@ while running:
     for segment in snake:
         rect = pygame.Rect(segment[0] * TILE_SIZE, segment[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
         pygame.draw.rect(screen, (0, 200, 0), rect)
+
+
+
+        if not game_over:
+            move_timer += dt
+            if move_timer >= MOVE_INTERVAL:
+                move_timer = 0
+ 
+            # Move snake
+                head = (snake[0][0] + direction[0], snake[0][1] + direction[1])
+ 
+            # Wall collision
+                if not (0 <= head[0] < COLS and 0 <= head[1] < ROWS):
+                    game_over = True
+            # Self collision
+                elif head in snake:
+                    game_over = True
+                else:
+                    snake.insert(0, head)
+                    if head == apple:
+                        score += 1
+                        apple = random_grid_pos(snake)
+                    # Speed up slightly every 5 apples
+                        MOVE_INTERVAL = max(0.05, 0.15 - (score // 5) * 0.01)
 
 
  
